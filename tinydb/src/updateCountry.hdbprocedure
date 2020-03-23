@@ -1,0 +1,34 @@
+PROCEDURE "tinyworld.tinydb::updateCountry" (
+
+  IN im_country NVARCHAR(100), im_country_new NVARCHAR(100),
+
+  OUT ex_error NVARCHAR(100))
+
+  LANGUAGE SQLSCRIPT SQL
+
+  SECURITY INVOKER AS
+
+  --READS SQL DATA AS
+
+BEGIN
+
+declare noc integer;
+
+select count(*) into noc
+
+     from "tinyworld.tinydb::tinyf.country"
+
+     where "name" = im_country;
+
+  if :noc > 0 then
+
+     update "tinyworld.tinydb::tinyf.country" set "name" = im_country_new
+    	where "name" = im_country;
+
+  else
+
+     ex_error := 'ERROR: Country ' || :im_country || ' not exists!';
+
+  end if;
+
+END;

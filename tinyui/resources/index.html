@@ -11,13 +11,40 @@
 			id="sap-ui-bootstrap" data-sap-ui-libs="sap.ui.commons, sap.ui.table" data-sap-ui-theme="sap_bluecrystal">
 		</script>
 		
+		<script src="./Util.js" > </script>
+		
 		<!-- 2.) Create a UI5 button and place it onto the page -->
 		<script>
 			var oModel = new sap.ui.model.odata.ODataModel("/euro.xsodata", true);
 
-			var oTable = new sap.ui.table.Table({ title: "European Countries" });
-
+			var oTable = new sap.ui.table.Table({ 
+				title: "European Countries",
+				visibleRowCount: 20,
+				id: "tinytab",
+				selectionMode: sap.ui.table.SelectionMode.None,
+				toolbar: new sap.ui.commons.Toolbar({
+					items: [
+						new sap.ui.commons.Button({
+							text: "Add Country",
+							press: openFirstDialog	})
+						]
+				})
+			});
+			
 			oTable.addColumn(new sap.ui.table.Column({ label: "Country Name", template: "name" }));
+			oTable.addColumn(new sap.ui.table.Column({ label: "", template: [
+				new sap.ui.commons.Button({
+					text: "Delete",
+					press: onDelete
+				})
+				]}));
+				
+			oTable.addColumn(new sap.ui.table.Column({ label: "", template: [
+				new sap.ui.commons.Button({
+					text: "Edit",
+					press: openEditDialog
+				})
+				]}));
 
 			oTable.setModel(oModel); oTable.bindRows("/euro"); oTable.placeAt("uiArea");
 		</script>
